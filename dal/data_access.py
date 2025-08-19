@@ -2,7 +2,7 @@ from sqlalchemy.orm import sessionmaker
 from database.db_setup import engine
 from contextlib import contextmanager
 
-Session = sessionmaker(bind=engine, future=True)
+Session = sessionmaker(bind=engine, future=True, expire_on_commit=False)
 
 @contextmanager
 def session_scope():
@@ -11,7 +11,7 @@ def session_scope():
     try:
         yield s
         s.commit()
-    except:
+    except Exception:
         s.rollback()
         raise
     finally:
